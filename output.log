@@ -1,0 +1,3439 @@
+Nov 29, 2016 3:30:49 PM roms.SystemTest turnLightOnPrintTicket
+INFO: 
+#############################################################
+TESTCASE: turnLightOnPrintTicket
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 10:00, OfficeKVM, okvm, addToMenu, M1, Fish, 8.88;
+1 10:01, TableDisplay, td1, startOrder;
+1 10:02, TableDisplay, td1, addMenuItem, M1;
+1 10:06, TableDisplay, td1, addMenuItem, M1;
+1 10:13, TableDisplay, td1, submitOrder;
+1 10:14, KitchenDisplay, kd, itemReady, 1, M1;
+1 10:18, KitchenDisplay, kd, itemReady, 1, M1;
+
+Expected output events:
+1 10:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,       Tab-1,     _, 
+        ID, Description, Count, 
+        M1,        Fish,     2;
+1 10:18, PassLight, pl, viewSwitchedOn;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Fish, 8.88
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Fish, 8.88
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Fish
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Fish
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Fish
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 1.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 1, M1).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.TicketPrinter printTicket
+FINE: tp
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 1 with ID M1 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 1, M1).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.PassLight switchOn
+FINE: pl
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 1 with ID M1 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 10:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,       Tab-1,     _, 
+        ID, Description, Count, 
+        M1,        Fish,     2;
+1 10:18, PassLight, pl, viewSwitchedOn;
+
+Actual output events:
+1 10:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,       Tab-1,     _, 
+        ID, Description, Count, 
+        M1,        Fish,     2;
+1 10:18, PassLight, pl, viewSwitchedOn;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest turnLightOnPrintTicket
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest noConnectionInTableUnits
+INFO: 
+#############################################################
+TESTCASE: NoConnectionInTableUnits
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 20:00, TableDisplay, td1, startOrder;
+1 20:02, TableDisplay, td1, submitOrder;
+1 20:00, TableDisplay, td2, startOrder;
+1 20:02, TableDisplay, td2, submitOrder;
+1 20:02, TableDisplay, td2, payBill;
+1 21:32, CardReader, cr2, acceptCardDetails, SOMEDETAILS;
+1 21:33, BankClient, bc, acceptAuthorisationCode, FirstPay;
+1 21:30, TableDisplay, td1, payBill;
+1 21:37, CardReader, cr1, acceptCardDetails, VISA;
+1 21:39, BankClient, bc, acceptAuthorisationCode, SecondPay;
+
+Expected output events:
+1 20:02, TableDisplay, td2, approveBill, Total:, 0.00;
+1 21:32, BankClient, bc, makePayment, SOMEDETAILS, 0.00;
+1 21:33, ReceiptPrinter, rp2, takeReceipt, Total:, 0.00, AuthCode:, FirstPay;
+1 21:30, TableDisplay, td1, approveBill, Total:, 0.00;
+1 21:37, BankClient, bc, makePayment, VISA, 0.00;
+1 21:39, ReceiptPrinter, rp1, takeReceipt, Total:, 0.00, AuthCode:, SecondPay;
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 1.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 2.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay payBill
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayBill
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection getCardDetails
+FINE: In mediator class
+Nov 29, 2016 3:30:49 PM roms.CardReader waitForCardDetails
+FINE: cr2
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection requestAuthorisation
+FINE: In mediator class
+Nov 29, 2016 3:30:49 PM roms.BankClient makePayment
+FINE: bc
+
+Nov 29, 2016 3:30:49 PM roms.BankClient waitForAuthorisation
+FINE: bc
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection requestReceipt
+FINE: In mediator class
+Nov 29, 2016 3:30:49 PM roms.ReceiptPrinter printReceipt
+FINE: rp2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay payBill
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayBill
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection getCardDetails
+FINE: In mediator class
+Nov 29, 2016 3:30:49 PM roms.CardReader waitForCardDetails
+FINE: cr1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection requestAuthorisation
+FINE: In mediator class
+Nov 29, 2016 3:30:49 PM roms.BankClient makePayment
+FINE: bc
+
+Nov 29, 2016 3:30:49 PM roms.BankClient waitForAuthorisation
+FINE: bc
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection requestReceipt
+FINE: In mediator class
+Nov 29, 2016 3:30:49 PM roms.ReceiptPrinter printReceipt
+FINE: rp1
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 20:02, TableDisplay, td2, approveBill, Total:, 0.00;
+1 21:32, BankClient, bc, makePayment, SOMEDETAILS, 0.00;
+1 21:33, ReceiptPrinter, rp2, takeReceipt, Total:, 0.00, AuthCode:, FirstPay;
+1 21:30, TableDisplay, td1, approveBill, Total:, 0.00;
+1 21:37, BankClient, bc, makePayment, VISA, 0.00;
+1 21:39, ReceiptPrinter, rp1, takeReceipt, Total:, 0.00, AuthCode:, SecondPay;
+
+Actual output events:
+1 20:02, TableDisplay, td2, approveBill, Total:, 0.00;
+1 21:32, BankClient, bc, makePayment, SOMEDETAILS, 0.00;
+1 21:33, ReceiptPrinter, rp2, takeReceipt, Total:, 0.00, AuthCode:, FirstPay;
+1 21:30, TableDisplay, td1, approveBill, Total:, 0.00;
+1 21:37, BankClient, bc, makePayment, VISA, 0.00;
+1 21:39, ReceiptPrinter, rp1, takeReceipt, Total:, 0.00, AuthCode:, SecondPay;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest noConnectionInTableUnits
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest ready_Existing_NotFirstNorLast
+INFO: 
+#############################################################
+TESTCASE: ready_Existing_NotFirstNorLast
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M1;
+1 19:06, TableDisplay, td1, addMenuItem, D1;
+1 19:07, TableDisplay, td1, addMenuItem, M1;
+1 19:08, TableDisplay, td1, addMenuItem, D1;
+1 19:13, TableDisplay, td1, submitOrder;
+1 20:14, KitchenDisplay, kd, itemReady, 1, D1;
+1 20:15, KitchenDisplay, kd, itemReady, 1, M1;
+
+Expected output events:
+1 20:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,          Tab-1,     _, 
+        ID,    Description, Count, 
+        D1,      Coca-cola,     2, 
+        M1, Chicken Breast,     2;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 1.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 1, D1).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.TicketPrinter printTicket
+FINE: tp
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 1 with ID D1 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 1, M1).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 1 with ID M1 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 20:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,          Tab-1,     _, 
+        ID,    Description, Count, 
+        D1,      Coca-cola,     2, 
+        M1, Chicken Breast,     2;
+
+Actual output events:
+1 20:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,          Tab-1,     _, 
+        ID,    Description, Count, 
+        D1,      Coca-cola,     2, 
+        M1, Chicken Breast,     2;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest ready_Existing_NotFirstNorLast
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest startOrder
+INFO: 
+#############################################################
+TESTCASE: startOrder
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 19:00, TableDisplay, td2, startOrder;
+1 20:00, TableDisplay, td2, showTicket;
+
+Expected output events:
+1 20:00, TableDisplay, td2, viewTicket, tuples, 3, 
+    ID, Description, Count;
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay showTicket
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayTicket
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 20:00, TableDisplay, td2, viewTicket, tuples, 3, 
+    ID, Description, Count;
+
+Actual output events:
+1 20:00, TableDisplay, td2, viewTicket, tuples, 3, 
+    ID, Description, Count;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest startOrder
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest addMenuItem
+INFO: 
+#############################################################
+TESTCASE: addMenuItem
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 20:00, TableDisplay, td1, showTicket;
+
+Expected output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    M2,   Meatballs,     1;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay showTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    M2,   Meatballs,     1;
+
+Actual output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    M2,   Meatballs,     1;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest addMenuItem
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest assert_addMenuItem_NonExisting
+INFO: 
+#############################################################
+TESTCASE: assert_addMenuItem_NonExisting
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, D7;
+
+Expected output events:
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D7
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: ERROR occured!
+An item with ID: D7does not exists.
+End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest fullSystemTest
+INFO: Full System Test #1 
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:00, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:00, OfficeKVM, okvm, addToMenu, M3, Soup, 1.25;
+1 18:00, OfficeKVM, okvm, addToMenu, M8, Pizza, 9.4;
+1 18:00, OfficeKVM, okvm, showMenu;
+1 18:01, OfficeKVM, okvm, addToMenu, D3, Beer, 2;
+1 18:01, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 18:01, OfficeKVM, okvm, addToMenu, D2, Soft Drink, 0.99;
+1 18:01, OfficeKVM, okvm, addToMenu, D4, Pepsi, 1.72;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.4;
+1 18:01, OfficeKVM, okvm, showMenu;
+1 19:00, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, D1;
+1 19:02, TableDisplay, td1, addMenuItem, M8;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, D3;
+1 19:03, TableDisplay, td1, showTicket;
+1 19:10, TableDisplay, td1, submitOrder;
+1 19:15, Clock, c, tick;
+1 19:14, KitchenDisplay, kd, itemReady, 1, D1;
+1 19:14, KitchenDisplay, kd, itemReady, 1, M2;
+1 19:05, TableDisplay, td2, startOrder;
+1 19:05, TableDisplay, td2, addMenuItem, D1;
+1 19:20, TableDisplay, td2, submitOrder;
+1 19:22, Clock, c, tick;
+1 19:25, KitchenDisplay, kd, itemReady, 1, D3;
+1 19:25, KitchenDisplay, kd, itemReady, 2, D1;
+
+Expected output events:
+1 18:00, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99, 
+    M3,           Soup,  1.25, 
+    M8,          Pizza,  9.40;
+1 18:01, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    D1,      Coca-cola,  1.73, 
+    D2,     Soft Drink,  0.99, 
+    D3,           Beer,  2.00, 
+    D4,          Pepsi,  1.72, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.40, 
+    M3,           Soup,  1.25, 
+    M8,          Pizza,  9.40;
+1 19:03, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    D1,   Coca-cola,     1, 
+    D3,        Beer,     1, 
+    M2,   Meatballs,     2, 
+    M8,       Pizza,     1;
+1 19:15, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID, Description, #Ordered, #Ready, 
+       5,       1,     D1,   Coca-cola,        1,      0, 
+       5,       1,     D3,        Beer,        1,      0, 
+       5,       1,     M2,   Meatballs,        2,      0, 
+       5,       1,     M8,       Pizza,        1,      0;
+1 19:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,       Tab-1,     _, 
+        ID, Description, Count, 
+        D1,   Coca-cola,     1, 
+        D3,        Beer,     1, 
+        M2,   Meatballs,     2, 
+        M8,       Pizza,     1;
+1 19:22, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID, Description, #Ordered, #Ready, 
+      12,       1,     D1,   Coca-cola,        1,      1, 
+      12,       1,     D3,        Beer,        1,      0, 
+      12,       1,     M2,   Meatballs,        2,      1, 
+      12,       1,     M8,       Pizza,        1,      0, 
+       2,       2,     D1,   Coca-cola,        1,      0;
+1 19:25, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,       Tab-2,     _, 
+        ID, Description, Count, 
+        D1,   Coca-cola,     1;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M3, Soup, 1.25
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Soup, 1.25
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M8, Pizza, 9.40
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Pizza, 9.40
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM showMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM displayMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu toStrings
+INFO: Retrieving menu items list.
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D3, Beer, 2.00
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Beer, 2.00
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D2, Soft Drink, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Soft Drink, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D4, Pepsi, 1.72
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Pepsi, 1.72
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.40
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.40
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM showMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM displayMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu toStrings
+INFO: Retrieving menu items list.
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M8
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M8, Pizza
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Pizza
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D3
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D3, Beer
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Beer
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay showTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 1.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.Clock tick
+FINE: c
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController refreshDisplay
+FINE: 
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay displayRack
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.Rack toStrings
+FINE: 
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 1, D1).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.TicketPrinter printTicket
+FINE: tp
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 1 with ID D1 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 1, M2).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 1 with ID M2 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 2.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.Clock tick
+FINE: c
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController refreshDisplay
+FINE: 
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay displayRack
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.Rack toStrings
+FINE: 
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 1, D3).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 1 with ID D3 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 2, D1).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.TicketPrinter printTicket
+FINE: tp
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 2 with ID D1 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 18:00, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99, 
+    M3,           Soup,  1.25, 
+    M8,          Pizza,  9.40;
+1 18:01, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    D1,      Coca-cola,  1.73, 
+    D2,     Soft Drink,  0.99, 
+    D3,           Beer,  2.00, 
+    D4,          Pepsi,  1.72, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.40, 
+    M3,           Soup,  1.25, 
+    M8,          Pizza,  9.40;
+1 19:03, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    D1,   Coca-cola,     1, 
+    D3,        Beer,     1, 
+    M2,   Meatballs,     2, 
+    M8,       Pizza,     1;
+1 19:15, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID, Description, #Ordered, #Ready, 
+       5,       1,     D1,   Coca-cola,        1,      0, 
+       5,       1,     D3,        Beer,        1,      0, 
+       5,       1,     M2,   Meatballs,        2,      0, 
+       5,       1,     M8,       Pizza,        1,      0;
+1 19:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,       Tab-1,     _, 
+        ID, Description, Count, 
+        D1,   Coca-cola,     1, 
+        D3,        Beer,     1, 
+        M2,   Meatballs,     2, 
+        M8,       Pizza,     1;
+1 19:22, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID, Description, #Ordered, #Ready, 
+      12,       1,     D1,   Coca-cola,        1,      1, 
+      12,       1,     D3,        Beer,        1,      0, 
+      12,       1,     M2,   Meatballs,        2,      1, 
+      12,       1,     M8,       Pizza,        1,      0, 
+       2,       2,     D1,   Coca-cola,        1,      0;
+1 19:25, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,       Tab-2,     _, 
+        ID, Description, Count, 
+        D1,   Coca-cola,     1;
+
+Actual output events:
+1 18:00, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99, 
+    M3,           Soup,  1.25, 
+    M8,          Pizza,  9.40;
+1 18:01, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    D1,      Coca-cola,  1.73, 
+    D2,     Soft Drink,  0.99, 
+    D3,           Beer,  2.00, 
+    D4,          Pepsi,  1.72, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.40, 
+    M3,           Soup,  1.25, 
+    M8,          Pizza,  9.40;
+1 19:03, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    D1,   Coca-cola,     1, 
+    D3,        Beer,     1, 
+    M2,   Meatballs,     2, 
+    M8,       Pizza,     1;
+1 19:15, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID, Description, #Ordered, #Ready, 
+       5,       1,     D1,   Coca-cola,        1,      0, 
+       5,       1,     D3,        Beer,        1,      0, 
+       5,       1,     M2,   Meatballs,        2,      0, 
+       5,       1,     M8,       Pizza,        1,      0;
+1 19:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,       Tab-1,     _, 
+        ID, Description, Count, 
+        D1,   Coca-cola,     1, 
+        D3,        Beer,     1, 
+        M2,   Meatballs,     2, 
+        M8,       Pizza,     1;
+1 19:22, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID, Description, #Ordered, #Ready, 
+      12,       1,     D1,   Coca-cola,        1,      1, 
+      12,       1,     D3,        Beer,        1,      0, 
+      12,       1,     M2,   Meatballs,        2,      1, 
+      12,       1,     M8,       Pizza,        1,      0, 
+       2,       2,     D1,   Coca-cola,        1,      0;
+1 19:25, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,       Tab-2,     _, 
+        ID, Description, Count, 
+        D1,   Coca-cola,     1;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest fullSystemTest
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest showMenuAtTable
+INFO: 
+#############################################################
+TESTCASE: showMenuAtTable
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 19:22, TableDisplay, td1, showMenu;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 05:00, TableDisplay, td1, showMenu;
+
+Expected output events:
+1 19:22, TableDisplay, td1, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99;
+1 05:00, TableDisplay, td1, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    D1,      Coca-cola,  1.73, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay showMenu
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayMenu
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu toStrings
+INFO: Retrieving menu items list.
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay showMenu
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayMenu
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu toStrings
+INFO: Retrieving menu items list.
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 19:22, TableDisplay, td1, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99;
+1 05:00, TableDisplay, td1, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    D1,      Coca-cola,  1.73, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99;
+
+Actual output events:
+1 19:22, TableDisplay, td1, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99;
+1 05:00, TableDisplay, td1, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    D1,      Coca-cola,  1.73, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest showMenuAtTable
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest testTick
+INFO: 
+#############################################################
+TESTCASE: testTick
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M1;
+1 19:06, TableDisplay, td1, addMenuItem, D1;
+1 19:07, TableDisplay, td1, addMenuItem, M1;
+1 19:08, TableDisplay, td1, addMenuItem, D1;
+1 19:13, TableDisplay, td1, submitOrder;
+1 19:01, TableDisplay, td2, startOrder;
+1 19:02, TableDisplay, td2, addMenuItem, M2;
+1 19:08, TableDisplay, td2, addMenuItem, D1;
+1 19:52, TableDisplay, td2, submitOrder;
+1 20:30, Clock, c, tick;
+
+Expected output events:
+1 20:30, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID,    Description, #Ordered, #Ready, 
+      77,       1,     D1,      Coca-cola,        2,      0, 
+      77,       1,     M1, Chicken Breast,        2,      0, 
+      38,       2,     D1,      Coca-cola,        1,      0, 
+      38,       2,     M2,      Meatballs,        1,      0;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 1.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 2.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.Clock tick
+FINE: c
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController refreshDisplay
+FINE: 
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay displayRack
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.Rack toStrings
+FINE: 
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 20:30, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID,    Description, #Ordered, #Ready, 
+      77,       1,     D1,      Coca-cola,        2,      0, 
+      77,       1,     M1, Chicken Breast,        2,      0, 
+      38,       2,     D1,      Coca-cola,        1,      0, 
+      38,       2,     M2,      Meatballs,        1,      0;
+
+Actual output events:
+1 20:30, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID,    Description, #Ordered, #Ready, 
+      77,       1,     D1,      Coca-cola,        2,      0, 
+      77,       1,     M1, Chicken Breast,        2,      0, 
+      38,       2,     D1,      Coca-cola,        1,      0, 
+      38,       2,     M2,      Meatballs,        1,      0;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest testTick
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest noConnectionInOrderTickets
+INFO: 
+#############################################################
+TESTCASE: noConnectionInOrderTickets
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:01, TableDisplay, td2, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td2, addMenuItem, M2;
+1 19:04, TableDisplay, td1, addMenuItem, D1;
+1 19:07, TableDisplay, td2, addMenuItem, M2;
+1 19:09, TableDisplay, td2, addMenuItem, M2;
+1 19:09, TableDisplay, td1, addMenuItem, D1;
+1 19:10, TableDisplay, td2, addMenuItem, M2;
+1 19:13, TableDisplay, td1, removeMenuItem, M2;
+1 20:00, TableDisplay, td1, showTicket;
+1 21:00, TableDisplay, td2, showTicket;
+
+Expected output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    D1,   Coca-cola,     2, 
+    M2,   Meatballs,     1;
+1 21:00, TableDisplay, td2, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    M2,   Meatballs,     4;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay removeMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket removeItemFromTicket
+INFO: Removes an item from the ticket with ID: M2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay showTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay showTicket
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayTicket
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    D1,   Coca-cola,     2, 
+    M2,   Meatballs,     1;
+1 21:00, TableDisplay, td2, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    M2,   Meatballs,     4;
+
+Actual output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    D1,   Coca-cola,     2, 
+    M2,   Meatballs,     1;
+1 21:00, TableDisplay, td2, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    M2,   Meatballs,     4;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest noConnectionInOrderTickets
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest payBill
+INFO: 
+#############################################################
+TESTCASE: payBill
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 20:00, TableDisplay, td1, startOrder;
+1 20:02, TableDisplay, td1, submitOrder;
+1 21:30, TableDisplay, td1, payBill;
+1 21:32, CardReader, cr1, acceptCardDetails, SOMEDETAILS;
+1 21:33, BankClient, bc, acceptAuthorisationCode, SOMECODE;
+
+Expected output events:
+1 21:30, TableDisplay, td1, approveBill, Total:, 0.00;
+1 21:32, BankClient, bc, makePayment, SOMEDETAILS, 0.00;
+1 21:33, ReceiptPrinter, rp1, takeReceipt, Total:, 0.00, AuthCode:, SOMECODE;
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 1.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay payBill
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayBill
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection getCardDetails
+FINE: In mediator class
+Nov 29, 2016 3:30:49 PM roms.CardReader waitForCardDetails
+FINE: cr1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection requestAuthorisation
+FINE: In mediator class
+Nov 29, 2016 3:30:49 PM roms.BankClient makePayment
+FINE: bc
+
+Nov 29, 2016 3:30:49 PM roms.BankClient waitForAuthorisation
+FINE: bc
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection requestReceipt
+FINE: In mediator class
+Nov 29, 2016 3:30:49 PM roms.ReceiptPrinter printReceipt
+FINE: rp1
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 21:30, TableDisplay, td1, approveBill, Total:, 0.00;
+1 21:32, BankClient, bc, makePayment, SOMEDETAILS, 0.00;
+1 21:33, ReceiptPrinter, rp1, takeReceipt, Total:, 0.00, AuthCode:, SOMECODE;
+
+Actual output events:
+1 21:30, TableDisplay, td1, approveBill, Total:, 0.00;
+1 21:32, BankClient, bc, makePayment, SOMEDETAILS, 0.00;
+1 21:33, ReceiptPrinter, rp1, takeReceipt, Total:, 0.00, AuthCode:, SOMECODE;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest payBill
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest removeMenuItem_Existing_CountOne
+INFO: 
+#############################################################
+TESTCASE: removeMenuItem_Existing_CountOne
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, D1;
+1 19:13, TableDisplay, td1, removeMenuItem, D1;
+1 20:00, TableDisplay, td1, showTicket;
+
+Expected output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    M2,   Meatballs,     2;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay removeMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket removeItemFromTicket
+INFO: Removes an item from the ticket with ID: D1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay showTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    M2,   Meatballs,     2;
+
+Actual output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    M2,   Meatballs,     2;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest removeMenuItem_Existing_CountOne
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest assert_removeMenuItem_NonExisting
+INFO: 
+#############################################################
+TESTCASE: assert_removeMenuItem_NonExisting
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, D1;
+1 19:13, TableDisplay, td1, removeMenuItem, D1;
+1 19:25, TableDisplay, td1, removeMenuItem, D1;
+
+Expected output events:
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay removeMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket removeItemFromTicket
+INFO: Removes an item from the ticket with ID: D1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay removeMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket removeItemFromTicket
+INFO: Removes an item from the ticket with ID: D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket removeItemFromTicket
+INFO: ERROR occured!
+End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest addToMenu_UpdateItem
+INFO: 
+#############################################################
+TESTCASE: addToMenu_UpdateItem
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Meatballs, 0.40;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:00, OfficeKVM, okvm, showMenu;
+
+Expected output events:
+1 19:00, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    D1,      Coca-cola,  1.73, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Meatballs, 0.40
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.40
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM showMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM displayMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu toStrings
+INFO: Retrieving menu items list.
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 19:00, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    D1,      Coca-cola,  1.73, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99;
+
+Actual output events:
+1 19:00, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    D1,      Coca-cola,  1.73, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest addToMenu_UpdateItem
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest assert_removeFromMenu_NonExistingItem
+INFO: 
+#############################################################
+TESTCASE: assert_removeFromMenu_NonExistingItem
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 19:02, OfficeKVM, okvm, removeFromMenu, M3;
+
+Expected output events:
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM removeFromMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu removeFromMenu
+INFO: Removing item from menu with ID -> M3
+
+Nov 29, 2016 3:30:49 PM roms.Menu removeFromMenu
+INFO: ERROR occured!
+An item with ID: M3 does not exist.
+End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest submitOrder
+INFO: 
+#############################################################
+TESTCASE: submitOrder
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, D1;
+1 19:13, TableDisplay, td1, removeMenuItem, D1;
+1 20:00, TableDisplay, td1, showTicket;
+1 20:20, TableDisplay, td1, submitOrder;
+1 20:20, Clock, c, tick;
+
+Expected output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    M2,   Meatballs,     2;
+1 20:20, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID, Description, #Ordered, #Ready, 
+       0,       1,     M2,   Meatballs,        2,      0;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay removeMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket removeItemFromTicket
+INFO: Removes an item from the ticket with ID: D1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay showTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 1.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.Clock tick
+FINE: c
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController refreshDisplay
+FINE: 
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay displayRack
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.Rack toStrings
+FINE: 
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    M2,   Meatballs,     2;
+1 20:20, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID, Description, #Ordered, #Ready, 
+       0,       1,     M2,   Meatballs,        2,      0;
+
+Actual output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    M2,   Meatballs,     2;
+1 20:20, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID, Description, #Ordered, #Ready, 
+       0,       1,     M2,   Meatballs,        2,      0;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest submitOrder
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest ready_Existing_Last
+INFO: 
+#############################################################
+TESTCASE: ready_Existing_Last
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M1;
+1 19:06, TableDisplay, td1, addMenuItem, D1;
+1 19:07, TableDisplay, td1, addMenuItem, M1;
+1 19:08, TableDisplay, td1, addMenuItem, D1;
+1 19:13, TableDisplay, td1, submitOrder;
+1 20:14, KitchenDisplay, kd, itemReady, 1, D1;
+1 20:14, KitchenDisplay, kd, itemReady, 1, D1;
+1 20:15, KitchenDisplay, kd, itemReady, 1, M1;
+1 20:30, KitchenDisplay, kd, itemReady, 1, M1;
+1 20:30, Clock, c, tick;
+
+Expected output events:
+1 20:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,          Tab-1,     _, 
+        ID,    Description, Count, 
+        D1,      Coca-cola,     2, 
+        M1, Chicken Breast,     2;
+1 20:30, PassLight, pl, viewSwitchedOn;
+1 20:30, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID, Description, #Ordered, #Ready;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 1.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 1, D1).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.TicketPrinter printTicket
+FINE: tp
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 1 with ID D1 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 1, D1).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 1 with ID D1 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 1, M1).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 1 with ID M1 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 1, M1).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.PassLight switchOn
+FINE: pl
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 1 with ID M1 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.Clock tick
+FINE: c
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController refreshDisplay
+FINE: 
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay displayRack
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.Rack toStrings
+FINE: 
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 20:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,          Tab-1,     _, 
+        ID,    Description, Count, 
+        D1,      Coca-cola,     2, 
+        M1, Chicken Breast,     2;
+1 20:30, PassLight, pl, viewSwitchedOn;
+1 20:30, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID, Description, #Ordered, #Ready;
+
+Actual output events:
+1 20:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,          Tab-1,     _, 
+        ID,    Description, Count, 
+        D1,      Coca-cola,     2, 
+        M1, Chicken Breast,     2;
+1 20:30, PassLight, pl, viewSwitchedOn;
+1 20:30, KitchenDisplay, kd, viewRack, tuples, 6, 
+    Time, Ticket#, MenuID, Description, #Ordered, #Ready;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest ready_Existing_Last
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest ready_Existing_First
+INFO: 
+#############################################################
+TESTCASE: ready_Existing_First
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M1;
+1 19:06, TableDisplay, td1, addMenuItem, D1;
+1 19:07, TableDisplay, td1, addMenuItem, M1;
+1 19:08, TableDisplay, td1, addMenuItem, D1;
+1 19:13, TableDisplay, td1, submitOrder;
+1 19:01, TableDisplay, td2, startOrder;
+1 19:02, TableDisplay, td2, addMenuItem, M2;
+1 19:08, TableDisplay, td2, addMenuItem, D1;
+1 19:52, TableDisplay, td2, submitOrder;
+1 20:14, KitchenDisplay, kd, itemReady, 1, M1;
+1 20:15, KitchenDisplay, kd, itemReady, 2, D1;
+
+Expected output events:
+1 20:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,          Tab-1,     _, 
+        ID,    Description, Count, 
+        D1,      Coca-cola,     2, 
+        M1, Chicken Breast,     2;
+1 20:15, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,       Tab-2,     _, 
+        ID, Description, Count, 
+        D1,   Coca-cola,     1, 
+        M2,   Meatballs,     1;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 1.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 2.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 1, M1).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.TicketPrinter printTicket
+FINE: tp
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 1 with ID M1 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 2, D1).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.TicketPrinter printTicket
+FINE: tp
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.Rack markReady
+INFO: Item from ticket 2 with ID D1 is marked ready.
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 20:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,          Tab-1,     _, 
+        ID,    Description, Count, 
+        D1,      Coca-cola,     2, 
+        M1, Chicken Breast,     2;
+1 20:15, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,       Tab-2,     _, 
+        ID, Description, Count, 
+        D1,   Coca-cola,     1, 
+        M2,   Meatballs,     1;
+
+Actual output events:
+1 20:14, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,          Tab-1,     _, 
+        ID,    Description, Count, 
+        D1,      Coca-cola,     2, 
+        M1, Chicken Breast,     2;
+1 20:15, TicketPrinter, tp, takeTicket, tuples, 3, 
+    Table:,       Tab-2,     _, 
+        ID, Description, Count, 
+        D1,   Coca-cola,     1, 
+        M2,   Meatballs,     1;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest ready_Existing_First
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest assert_ready_NonExistingMenuID
+INFO: 
+#############################################################
+TESTCASE: assert_ready_NonExistingMenuID
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M1;
+1 19:06, TableDisplay, td1, addMenuItem, D1;
+1 19:07, TableDisplay, td1, addMenuItem, M1;
+1 19:08, TableDisplay, td1, addMenuItem, D1;
+1 19:13, TableDisplay, td1, submitOrder;
+1 20:14, KitchenDisplay, kd, itemReady, 1, D2;
+
+Expected output events:
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 1.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 1, D2).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: ERROR Occured!
+There is no existing item with ID: D2 in ticket: 1.
+End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest startOrderExistingOrder
+INFO: 
+#############################################################
+TESTCASE: startOrderExistingOrder
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:00, TableDisplay, td2, startOrder;
+1 20:00, TableDisplay, td2, showTicket;
+
+Expected output events:
+1 20:00, TableDisplay, td2, viewTicket, tuples, 3, 
+    ID, Description, Count;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay showTicket
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayTicket
+FINE: td2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 20:00, TableDisplay, td2, viewTicket, tuples, 3, 
+    ID, Description, Count;
+
+Actual output events:
+1 20:00, TableDisplay, td2, viewTicket, tuples, 3, 
+    ID, Description, Count;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest startOrderExistingOrder
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest cancelReadyUpLight
+INFO: 
+#############################################################
+TESTCASE: cancelReadyUpLight
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, PassButton, pb, press;
+
+Expected output events:
+1 18:00, PassLight, pl, viewSwitchedOff;
+
+Nov 29, 2016 3:30:49 PM roms.PassButton press
+FINE: pb
+
+Nov 29, 2016 3:30:49 PM roms.PassLight switchOff
+FINE: pl
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 18:00, PassLight, pl, viewSwitchedOff;
+
+Actual output events:
+1 18:00, PassLight, pl, viewSwitchedOff;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest cancelReadyUpLight
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest addMenuItem_Same
+INFO: 
+#############################################################
+TESTCASE: addMenuItem_Same
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, D1;
+1 20:00, TableDisplay, td1, showTicket;
+
+Expected output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    D1,   Coca-cola,     1, 
+    M2,   Meatballs,     2;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay showTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    D1,   Coca-cola,     1, 
+    M2,   Meatballs,     2;
+
+Actual output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    D1,   Coca-cola,     1, 
+    M2,   Meatballs,     2;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest addMenuItem_Same
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest assert_ready_NonExistingTicketNumber
+INFO: 
+#############################################################
+TESTCASE: assert_ready_NonExistingTicketNumber
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M1;
+1 19:06, TableDisplay, td1, addMenuItem, D1;
+1 19:07, TableDisplay, td1, addMenuItem, M1;
+1 19:08, TableDisplay, td1, addMenuItem, D1;
+1 19:13, TableDisplay, td1, submitOrder;
+1 20:14, KitchenDisplay, kd, itemReady, 2, D1;
+
+Expected output events:
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M1, Chicken Breast
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay submitOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableConnection sendOrder
+INFO: Sending order ticket from table: null
+
+Nov 29, 2016 3:30:49 PM roms.Rack receiveOrder
+INFO: Adding new ticket to rack with number 1.
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new ticket from submited order ticket.
+
+Nov 29, 2016 3:30:49 PM roms.KitchenDisplay itemReady
+FINE: kd
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: Try to mark item ( 2, D1).
+
+Nov 29, 2016 3:30:49 PM roms.Rack getRackMap
+INFO: Retrieving of ticket list
+
+Nov 29, 2016 3:30:49 PM roms.KitchenController markItem
+INFO: ERROR Occured!
+There is no existing ticket with number: 2.
+End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest removeFromMenu_ExistingItem
+INFO: 
+#############################################################
+TESTCASE: removeFromMenu_ExistingItem
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 19:02, OfficeKVM, okvm, removeFromMenu, M1;
+1 19:00, OfficeKVM, okvm, showMenu;
+
+Expected output events:
+1 19:00, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID, Description, Price, 
+    M2,   Meatballs,  0.99;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM removeFromMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu removeFromMenu
+INFO: Removing item from menu with ID -> M1
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM showMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM displayMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu toStrings
+INFO: Retrieving menu items list.
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 19:00, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID, Description, Price, 
+    M2,   Meatballs,  0.99;
+
+Actual output events:
+1 19:00, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID, Description, Price, 
+    M2,   Meatballs,  0.99;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest removeFromMenu_ExistingItem
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest assert_addToMenu_NegativePrice
+INFO: 
+#############################################################
+TESTCASE: assert_addToMenu_NegativePrice
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, -0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+
+Expected output events:
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, -0.99
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: ERROR occured!
+The price has to be a positive number.
+End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest addToMenu_NewItem
+INFO: 
+#############################################################
+TESTCASE: addToMenu_NewItem
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 19:00, OfficeKVM, okvm, showMenu;
+
+Expected output events:
+1 19:00, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM showMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM displayMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu toStrings
+INFO: Retrieving menu items list.
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 19:00, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99;
+
+Actual output events:
+1 19:00, OfficeKVM, okvm, viewMenu, tuples, 3, 
+    ID,    Description, Price, 
+    M1, Chicken Breast,  4.13, 
+    M2,      Meatballs,  0.99;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest addToMenu_NewItem
+INFO: End of test
+
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest removeMenuItem_Existing_CountMany
+INFO: 
+#############################################################
+TESTCASE: removeMenuItem_Existing_CountMany
+#############################################################
+Nov 29, 2016 3:30:49 PM roms.TestBasis run
+INFO: 
+Input events:
+1 18:00, OfficeKVM, okvm, addToMenu, M1, Chicken Breast, 4.13;
+1 18:01, OfficeKVM, okvm, addToMenu, M2, Meatballs, 0.99;
+1 18:03, OfficeKVM, okvm, addToMenu, D1, Coca-cola, 1.73;
+1 19:01, TableDisplay, td1, startOrder;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, M2;
+1 19:02, TableDisplay, td1, addMenuItem, D1;
+1 19:13, TableDisplay, td1, removeMenuItem, M2;
+1 20:00, TableDisplay, td1, showTicket;
+
+Expected output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    D1,   Coca-cola,     1, 
+    M2,   Meatballs,     1;
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M1, Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Chicken Breast, 4.13
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> M2, Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Meatballs, 0.99
+
+Nov 29, 2016 3:30:49 PM roms.OfficeKVM addToMenu
+FINE: okvm
+
+Nov 29, 2016 3:30:49 PM roms.Menu addToMenu
+INFO: Adding new item to menu -> D1, Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.MenuItem <init>
+INFO: Creating new MenuItem with arguments: Coca-cola, 1.73
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay startOrder
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket <init>
+INFO: Creating new order ticket for device td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> M2
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: M2, Meatballs
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay addMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Menu getMenuItem
+INFO: Retrieving menu item with ID -> D1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket addItemToTicket
+INFO: Adds new item to the ticket: D1, Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TicketItem <init>
+INFO: Creating new TicketItem with arguments:  Coca-cola
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay removeMenuItem
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket removeItemFromTicket
+INFO: Removes an item from the ticket with ID: M2
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay showTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.TableDisplay displayTicket
+FINE: td1
+
+Nov 29, 2016 3:30:49 PM roms.Ticket toStrings
+INFO: Retrieving ticket items list
+
+Nov 29, 2016 3:30:49 PM roms.TestBasis checkTestResults
+INFO: EVENT LISTS EQUAL
+
+Expected output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    D1,   Coca-cola,     1, 
+    M2,   Meatballs,     1;
+
+Actual output events:
+1 20:00, TableDisplay, td1, viewTicket, tuples, 3, 
+    ID, Description, Count, 
+    D1,   Coca-cola,     1, 
+    M2,   Meatballs,     1;
+
+Nov 29, 2016 3:30:49 PM roms.SystemTest removeMenuItem_Existing_CountMany
+INFO: End of test
+
+
+TEST RESULTS
+Number of tests run: 48
+ALL TESTS PASSED

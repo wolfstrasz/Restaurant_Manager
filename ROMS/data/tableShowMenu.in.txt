@@ -1,0 +1,7 @@
+1 12:00, OfficeKVM, okvm, addToMenu, M1, Fish, 7.95;
+1 12:00, OfficeKVM, okvm, addToMenu, M2, Veg Chili, 6.70;
+1 12:00, OfficeKVM, okvm, addToMenu, D1, Soft Drink, 1.50;
+1 12:00, OfficeKVM, okvm, addToMenu, D2, Wine, 3.25;
+1 19:15, TableDisplay, td1, showMenu;
+1 19:20, OfficeKVM, okvm, addToMenu, M3, Meat Chili, 6.70;
+1 19:25, TableDisplay, td1, showMenu;

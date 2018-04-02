@@ -1,0 +1,2 @@
+1 21:32, CardReader, cr1, acceptCardDetails, XYZ1234;
+1 21:33, BankClient, bc, acceptAuthorisationCode, ABCD;
